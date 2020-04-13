@@ -14,15 +14,15 @@ namespace Action.Common.RabbitMq
     {
         public static Task WithCommandHandlerAsync<TCommand>(this IBusClient bus, ICommandHandler<TCommand> handler) 
         where TCommand: ICommand 
-        => bus.SubscribeAsync<TCommand>(msg => handler.HandlerAsync(msg),
-            ctx => ctx.UseConsumerConfiguration(cfg => 
+        => bus.SubscribeAsync<TCommand>(msg =>  handler.HandlerAsync(msg),
+            ctx => ctx.UseSubscribeConfiguration(cfg => 
                 cfg.FromDeclaredQueue(q => 
                     q.WithName(GetQueueName<TCommand>()))));
 
         public static Task WithEventHandlerAsync<TEvent>(this IBusClient bus, IEventHandler<TEvent> handler) 
         where TEvent: IEvent 
         => bus.SubscribeAsync<TEvent>(msg => handler.HandlerAsync(msg),
-            ctx => ctx.UseConsumerConfiguration(cfg => 
+            ctx => ctx.UseSubscribeConfiguration(cfg => 
                 cfg.FromDeclaredQueue(q => 
                     q.WithName(GetQueueName<TEvent>()))));
 

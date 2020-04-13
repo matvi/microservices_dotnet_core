@@ -2,6 +2,7 @@ using System.Threading.Tasks;
 using Action.Common.Commands;
 using Action.Common.Events;
 using RawRabbit;
+using System;
 
 namespace Action.Services.Activities.Handlers
 {
@@ -15,7 +16,7 @@ namespace Action.Services.Activities.Handlers
         }
         public async Task HandlerAsync(CreateActivity command)
         {
-            System.Console.WriteLine($"creating activity: {command.Name}");
+            System.Console.WriteLine($"creating activity: {command.Name}, {DateTime.Now.ToString()} ");
 
             //execute the handler
             await _busClient.PublishAsync(new ActivityCreated(

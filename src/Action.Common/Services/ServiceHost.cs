@@ -7,6 +7,7 @@ using Action.Common.Events;
 using Action.Common.RabbitMq;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Action.Common.Services
 {
@@ -58,6 +59,7 @@ namespace Action.Common.Services
                 _bus = (IBusClient)_webHost.Services.GetService(typeof(IBusClient));
                 return new BusBuilder(_webHost, _bus);
             }
+
             public override ServiceHost Build()
             {
                 return new ServiceHost(_webHost);
@@ -77,18 +79,52 @@ namespace Action.Common.Services
 
             public BusBuilder SubscribeToCommand<TCommand>() where TCommand: ICommand
             {
-                var handler = (ICommandHandler<TCommand>) _webHost.Services
-                .GetService(typeof(ICommandHandler<TCommand>));
-                _bus.WithCommandHandlerAsync(handler);
-                return this;
+                using (var serviceScope = _webHost.Services.CreateScope())
+                {
+                    var service = serviceScope.ServiceProvider;
+
+                    try
+                    {
+                        var handler = service.GetRequiredService<ICommandHandler<TCommand>>();
+                        _bus.WithCommandHandlerAsync(handler);
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine(e);
+                        throw;
+                    }
+                }
+
+            return this;
+            //     var handler = (ICommandHandler<TCommand>) _webHost.Services
+            //     .GetService(typeof(ICommandHandler<TCommand>));
+            //     _bus.WithCommandHandlerAsync(handler);
+            //     return this;
             }
 
             public BusBuilder SubscribeToEvent<TEvemt>() where TEvemt: IEvent
             {
-                var handler = (IEventHandler<TEvemt>) _webHost.Services
-                .GetService(typeof(IEventHandler<TEvemt>));
-                _bus.WithEventHandlerAsync(handler);
+                using (var serviceScope = _webHost.Services.CreateScope())
+                {
+                    var service = serviceScope.ServiceProvider;
+
+                    try
+                    {
+                        var handler = service.GetRequiredService<IEventHandler<TEvemt>>();
+                        _bus.WithEventHandlerAsync(handler);
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine(e);
+                        throw;
+                    }
+                }
+
                 return this;
+                // var handler = (IEventHandler<TEvemt>) _webHost.Services
+                // .GetService(typeof(IEventHandler<TEvemt>));
+                // _bus.WithEventHandlerAsync(handler);
+                // return this;
             }
 
             public override ServiceHost Build()
