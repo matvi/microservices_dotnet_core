@@ -13,20 +13,24 @@ namespace Action.Common.mongo
         private bool _initialized;
         private readonly bool _seed;
         private readonly IMongoDatabase _database;
+        private readonly IDatabaseSeeder _databaseSeeder;
 
-        public MongoDatabaseInitilizer(IMongoDatabase database, IOptions<MongoOptions> options)
+        public MongoDatabaseInitilizer(IMongoDatabase database, IOptions<MongoOptions> options, IDatabaseSeeder databaseSeeder)
         {
+            _databaseSeeder = databaseSeeder;
             _database = database;
             _seed = options.Value.Seed;
         }
         public async Task InitializeAsync()
         {
-            if(_initialized) return;
+            if (_initialized) return;
 
             RegisterConventions();
             _initialized = true;
 
-            if(!_seed) return;
+            if (!_seed) return;
+
+            await _databaseSeeder.SeedAsync();
 
         }
 
@@ -43,5 +47,6 @@ namespace Action.Common.mongo
                 new EnumRepresentationConvention(BsonType.String),
                 new CamelCaseElementNameConvention()
             };
+        }
     }
 }
