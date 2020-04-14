@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Action.Common.Commands;
+using Action.Common.mongo;
 using Action.Common.RabbitMq;
 using Action.Services.Activities.Handlers;
 using Microsoft.AspNetCore.Builder;
@@ -30,6 +31,7 @@ namespace Action.Services.Activities
         {
             services.AddControllers();
             services.AddRabbitMq(Configuration);
+            services.AddMongoDB(Configuration);
             services.AddScoped<ICommandHandler<CreateActivity>, CreateActivityHandler>();
         }
 
