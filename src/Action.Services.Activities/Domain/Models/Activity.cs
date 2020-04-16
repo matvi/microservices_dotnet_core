@@ -1,4 +1,5 @@
 using System;
+using Action.Common.Exceptions;
 
 namespace Action.Services.Activities.Domain.Models
 {
@@ -15,6 +16,10 @@ namespace Action.Services.Activities.Domain.Models
 
         public Activity(Guid id, Category category, Guid userId, string name, string description, DateTime createdAt)
         {
+            if (string.IsNullOrEmpty(name))
+            {
+                throw new ActioException("empty_activity_name", $"Activity name can not be empty.");
+            }
             Id = id;
             Category = category.Name;
             UserId = userId;

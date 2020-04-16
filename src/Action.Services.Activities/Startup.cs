@@ -38,8 +38,8 @@ namespace Action.Services.Activities
             services.AddScoped<ICommandHandler<CreateActivity>, CreateActivityHandler>();
             services.AddScoped<Domain.Repositories.IActivityRepository, ActivityRepository>();
             services.AddScoped<Domain.Repositories.ICategoryRepository, CategoryRepository>();
-            //services.AddScoped<IDatabaseSeeder, MongoSeeder>();
             services.AddScoped<IDatabaseSeeder, CustomMongoSeeder>();
+            services.AddScoped<IActivityService, ActivityService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
