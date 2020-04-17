@@ -24,7 +24,7 @@ namespace Action.Services.Activities.Domain.Models
             Category = category.Name;
             UserId = userId;
             Name = name;
-            Description = Description;
+            Description = description;
             CreatedAt = createdAt;
         }
 
