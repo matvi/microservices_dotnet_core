@@ -2,6 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Action.Common.Commands;
+using Action.Common.mongo;
+using Action.Common.RabbitMq;
+using Action.Services.Identity.Domain.Repositories;
+using Action.Services.Identity.Domain.Services;
+using Action.Services.Identity.handlers;
+using Action.Services.Identity.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -26,6 +33,11 @@ namespace Action.Services.Identity
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+            services.AddRabbitMq(Configuration);
+            services.AddMongoDB(Configuration);
+            services.AddScoped<IUserRepository,UserRepository>();
+            services.AddScoped<IEncrypter,Encrypter>();
+            services.AddScoped<ICommandHandler<CreateUserCommand>, CreateUserCommandHandler>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -35,6 +47,8 @@ namespace Action.Services.Identity
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.InitilizeDatabase();
 
             app.UseHttpsRedirection();
 

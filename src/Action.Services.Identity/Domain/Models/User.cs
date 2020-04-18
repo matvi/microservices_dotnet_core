@@ -1,5 +1,6 @@
 using System;
 using Action.Common.Exceptions;
+using Action.Services.Identity.Domain.Services;
 
 namespace Action.Services.Identity.Domain.Models
 {
@@ -31,5 +32,21 @@ namespace Action.Services.Identity.Domain.Models
             Name = name;
             CreatedAt = DateTime.Now;
         }
+
+
+        public void SetPassword(string password, IEncrypter encrypter)
+        {
+            if (string.IsNullOrWhiteSpace(password))
+            {
+                throw new ActioException("BAD_PASSWORD","The password can´t be empty");
+            }
+            
+            Salt = encrypter.GetSalt();
+            Password = encrypter.GetHash(password, Salt);
+        }
+
+        public bool ValidatePassword(string password, IEncrypter encrypter)
+            =>  Password.Equals(encrypter.GetHash(password, Salt));
+        
     }
 }
