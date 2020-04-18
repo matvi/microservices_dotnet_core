@@ -17,7 +17,7 @@ namespace Action.Services.Identity
         {
             ServiceHost.Create<Startup>(args)
             .UserRabbitMq()
-            .SubscribeToCommand<CreateUser>()
+            .SubscribeToCommand<CreateUserCommand>()
             .Build()
             .Run();
             // CreateHostBuilder(args).Build().Run();

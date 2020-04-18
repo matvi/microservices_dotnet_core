@@ -1,6 +1,6 @@
 namespace Action.Common.Commands
 {
-    public class CreateUser : ICommand
+    public class CreateUserCommand : ICommand
     {
         public string Email { get; set; }
         public string Password { get; set; }

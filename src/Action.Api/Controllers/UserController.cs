@@ -17,7 +17,7 @@ namespace Action.Api.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Activity(CreateUser command)
+        public async Task<IActionResult> Activity(CreateUserCommand command)
         {
             await _busClient.PublishAsync(command);
 
