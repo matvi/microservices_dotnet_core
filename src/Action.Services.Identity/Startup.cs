@@ -9,6 +9,7 @@ using Action.Services.Identity.Domain.Repositories;
 using Action.Services.Identity.Domain.Services;
 using Action.Services.Identity.handlers;
 using Action.Services.Identity.Repositories;
+using Action.Services.Identity.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -38,6 +39,7 @@ namespace Action.Services.Identity
             services.AddScoped<IUserRepository,UserRepository>();
             services.AddScoped<IEncrypter,Encrypter>();
             services.AddScoped<ICommandHandler<CreateUserCommand>, CreateUserCommandHandler>();
+            services.AddScoped<IUserService, UserService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
