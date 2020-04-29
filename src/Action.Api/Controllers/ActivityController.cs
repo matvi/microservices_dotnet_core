@@ -1,6 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using Action.Common.Commands;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using RawRabbit;
 
@@ -26,5 +27,8 @@ namespace Action.Api.Controllers
             return Accepted($"activities/{command.Id}");
         }
         
+        [HttpGet]
+        [Authorize]
+        public IActionResult GetAction() => Content("secured");
     }
 }

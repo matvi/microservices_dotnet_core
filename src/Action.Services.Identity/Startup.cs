@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Action.Common.Auth;
 using Action.Common.Commands;
 using Action.Common.mongo;
 using Action.Common.RabbitMq;
@@ -36,6 +37,7 @@ namespace Action.Services.Identity
             services.AddControllers();
             services.AddRabbitMq(Configuration);
             services.AddMongoDB(Configuration);
+            services.AddJwt(Configuration);
             services.AddScoped<IUserRepository,UserRepository>();
             services.AddScoped<IEncrypter,Encrypter>();
             services.AddScoped<ICommandHandler<CreateUserCommand>, CreateUserCommandHandler>();

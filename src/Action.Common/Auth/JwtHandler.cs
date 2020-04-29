@@ -1,5 +1,6 @@
 using System;
 using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 using System.Text;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
@@ -8,50 +9,61 @@ namespace Action.Common.Auth
 {
     public class JwtHandler : IJwtHandler
     {
-        private readonly JwtSecurityTokenHandler _jwtSecurityTokenHandler = new JwtSecurityTokenHandler();
+
         private readonly JwtOptions _options;
-        private readonly SecurityKey _issuerSiginKey;
-        private readonly JwtHeader _jwtHeader;
-        private readonly TokenValidationParameters _tokenValidationParameters;
-        private readonly SigningCredentials _signingCredentials;
 
         public JwtHandler(IOptions<JwtOptions> options)
         {
             _options = options.Value;
-            _issuerSiginKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_options.SecretKey));
-            _signingCredentials = new SigningCredentials(_issuerSiginKey, SecurityAlgorithms.HmacSha256);
-            _jwtHeader = new JwtHeader(_signingCredentials);
-            _tokenValidationParameters = new TokenValidationParameters
-            {
-                ValidateAudience = false,
-                ValidIssuer = _options.Issuer,
-                IssuerSigningKey = _issuerSiginKey
-            };
-        }
-        
-        public JsonWebToekn Create(Guid userId)
-        {
-            var nowUtc = DateTime.UtcNow;
-            var expires = nowUtc.AddMinutes(_options.ExpireMinutes);
-            var centuryBegin = new DateTime(1970, 1, 1).ToUniversalTime();
-            var exp = (long) (new TimeSpan(expires.Ticks - centuryBegin.Ticks).TotalSeconds);
-            var now = (long) (new TimeSpan(nowUtc.Ticks - centuryBegin.Ticks).TotalSeconds);
-            var payload = new JwtPayload
-            {
-                {"sub", userId},
-                {"iss", _options.Issuer},
-                {"iat", now},
-                {"exp", exp},
-                {"unique_name", userId}
-            };
-            var jwt = new JwtSecurityToken(_jwtHeader, payload);
-            var token = _jwtSecurityTokenHandler.WriteToken(jwt);
 
-            return new JsonWebToekn
+        }
+
+        // public JsonWebToken GenerateToken(Guid userId)
+        // {
+        //     var nowUtc = DateTime.UtcNow;
+        //     var expires = nowUtc.AddMinutes(_options.ExpireMinutes);
+        //     var centuryBegin = new DateTime(1970, 1, 1).ToUniversalTime();
+        //     var exp = (long) (new TimeSpan(expires.Ticks - centuryBegin.Ticks).TotalSeconds);
+        //     var now = (long) (new TimeSpan(nowUtc.Ticks - centuryBegin.Ticks).TotalSeconds);
+        //     var payload = new JwtPayload
+        //     {
+        //         {"sub", userId},
+        //         {"iss", _options.Issuer},
+        //         {"iat", now},
+        //         {"exp", exp},
+        //         {"unique_name", userId}
+        //     };
+        //     var jwt = new JwtSecurityToken(_jwtHeader, payload);
+        //     var token = _jwtSecurityTokenHandler.WriteToken(jwt);
+
+        //     return new JsonWebToken(token, expires);
+        // }
+
+        public JsonWebToken GenerateToken(Guid userId)
+        {
+            var utcNow = DateTime.Now;
+            var expires = utcNow.AddMinutes(_options.ExpireMinutes);
+            var issuerSiginKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_options.SecretKey));
+            var signingCredentials = new SigningCredentials(new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_options.SecretKey)), SecurityAlgorithms.HmacSha256);
+
+            var claims = new Claim[]
             {
-                Token = token,
-                Expires = exp
+                new Claim(JwtRegisteredClaimNames.UniqueName, userId.ToString()),
+                new Claim(JwtRegisteredClaimNames.Iss, _options.Issuer.ToString()),
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                new Claim(JwtRegisteredClaimNames.Iat, utcNow.ToTimeStamp().ToString(), ClaimValueTypes.Integer64)
             };
+
+            var jwt = new JwtSecurityToken(
+                issuer: _options.Issuer,
+                claims: claims,
+                notBefore: utcNow,
+                expires: expires,
+                signingCredentials: signingCredentials);
+
+            var token = new JwtSecurityTokenHandler().WriteToken(jwt);
+
+            return new JsonWebToken(token, expires);
         }
     }
 }

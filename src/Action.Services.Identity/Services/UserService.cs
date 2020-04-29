@@ -1,4 +1,5 @@
 using System.Threading.Tasks;
+using Action.Common.Auth;
 using Action.Common.Exceptions;
 using Action.Services.Identity.Domain.Models;
 using Action.Services.Identity.Domain.Repositories;
@@ -7,14 +8,16 @@ using Action.Services.Identity.Domain.Services;
 namespace Action.Services.Identity.Services {
     public class UserService : IUserService {
         private readonly IEncrypter _encrypter;
+        private readonly IJwtHandler _jwtHandler;
         private readonly IUserRepository _userRepository;
-        public UserService (IUserRepository userRepository, IEncrypter encrypter) 
+        public UserService (IUserRepository userRepository, IEncrypter encrypter, IJwtHandler jwtHandler) 
         {
             _userRepository = userRepository;
             _encrypter = encrypter;
+            _jwtHandler = jwtHandler;
         }
 
-        public async Task LoginAsync (string email, string password) 
+        public async Task<JsonWebToken> LoginAsync (string email, string password) 
         {
             var user = await _userRepository.GetAsync(email);
             if( user == null)
@@ -26,6 +29,8 @@ namespace Action.Services.Identity.Services {
             {
                 throw new ActioException("Invalid_password", "Password not valid");
             }
+            
+            return _jwtHandler.GenerateToken(user.Id);
         }
 
         public async Task RegisterAsync (string email, string password, string name)

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Action.Api.Handlers;
+using Action.Common.Auth;
 using Action.Common.Events;
 using Action.Common.RabbitMq;
 using Microsoft.AspNetCore.Builder;
@@ -30,6 +31,7 @@ namespace Action.Api
         {
             services.AddControllers();
             services.AddRabbitMq(Configuration);
+            services.AddJwt(Configuration);
             services.AddScoped<IEventHandler<ActivityCreated>, ActivityCreatedHandler>();
         }
 
@@ -45,6 +47,8 @@ namespace Action.Api
 
             app.UseRouting();
 
+            app.UseAuthentication();
+            
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
