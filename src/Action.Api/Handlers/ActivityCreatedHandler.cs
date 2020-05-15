@@ -1,14 +1,31 @@
 using System.Threading.Tasks;
+using Action.Api.Domain.Model;
+using Action.Api.Repositories;
 using Action.Common.Events;
 
 namespace Action.Api.Handlers
 {
     public class ActivityCreatedHandler : IEventHandler<ActivityCreated>
     {
-        public async Task HandlerAsync(ActivityCreated events)
+        private readonly IActivityRepository _activityRepository;
+        public ActivityCreatedHandler(IActivityRepository activityRepository)
         {
-            await Task.CompletedTask;
-            System.Console.WriteLine($"Activity created: {events.Name}");
+            _activityRepository = activityRepository;
+
+        }
+        public async Task HandlerAsync(ActivityCreated activityCreated)
+        {
+            var activity = new Activity()
+            {
+                Id = activityCreated.Id,
+                Category = activityCreated.Category,
+                CreatedAt = activityCreated.CreatedAt,
+                Description = activityCreated.Description,
+                Name = activityCreated.Name,
+                UserId = activityCreated.UserId
+            };
+            await _activityRepository.AddAsync(new Activity());
+            System.Console.WriteLine($"Activity created: {activityCreated.Name}");
         }
     }
 }

@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Action.Api.Handlers;
+using Action.Api.Repositories;
 using Action.Common.Auth;
 using Action.Common.Events;
+using Action.Common.mongo;
 using Action.Common.RabbitMq;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -31,8 +33,10 @@ namespace Action.Api
         {
             services.AddControllers();
             services.AddRabbitMq(Configuration);
+            services.AddMongoDB(Configuration);
             services.AddJwt(Configuration);
             services.AddScoped<IEventHandler<ActivityCreated>, ActivityCreatedHandler>();
+            services.AddScoped<IActivityRepository, ActivityRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
