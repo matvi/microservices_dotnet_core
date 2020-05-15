@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Action.Api.Handlers;
 using Action.Api.Repositories;
+using Action.Api.Services;
 using Action.Common.Auth;
 using Action.Common.Events;
 using Action.Common.mongo;
@@ -37,6 +38,7 @@ namespace Action.Api
             services.AddJwt(Configuration);
             services.AddScoped<IEventHandler<ActivityCreated>, ActivityCreatedHandler>();
             services.AddScoped<IActivityRepository, ActivityRepository>();
+            services.AddScoped<IActivityService, ActivityService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
