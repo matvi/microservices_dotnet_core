@@ -36,7 +36,7 @@ namespace Action.Api.Controllers {
             return Ok(activities);
         }
 
-        [HttpGet("activityId")]
+        [HttpGet("{activityId}")]
         public async Task<IActionResult> GetAction(Guid activityId) 
         {
             var activity = await _activityService.GetActivityById(activityId);

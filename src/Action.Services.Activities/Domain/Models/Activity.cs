@@ -14,13 +14,13 @@ namespace Action.Services.Activities.Domain.Models
 
         protected Activity(){}
 
-        public Activity(Guid id, Category category, Guid userId, string name, string description, DateTime createdAt)
+        public Activity(Guid ids, Category category, Guid userId, string name, string description, DateTime createdAt)
         {
             if (string.IsNullOrEmpty(name))
             {
                 throw new ActioException("empty_activity_name", $"Activity name can not be empty.");
             }
-            Id = id;
+            Id = ids;
             Category = category.Name;
             UserId = userId;
             Name = name;

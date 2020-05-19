@@ -24,7 +24,7 @@ namespace Action.Api.Handlers
                 Name = activityCreated.Name,
                 UserId = activityCreated.UserId
             };
-            await _activityRepository.AddAsync(new Activity());
+            await _activityRepository.AddAsync(activity);
             System.Console.WriteLine($"Activity created: {activityCreated.Name}");
         }
     }

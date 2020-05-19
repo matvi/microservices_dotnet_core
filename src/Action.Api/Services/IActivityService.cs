@@ -9,6 +9,6 @@ namespace Action.Api.Services
     {
          Task<IEnumerable<Activity>> GetActivities(Guid userId);
 
-         Task<Activity> GetActivityById(Guid activityId)
+         Task<Activity> GetActivityById(Guid activityId);
     }
 }
