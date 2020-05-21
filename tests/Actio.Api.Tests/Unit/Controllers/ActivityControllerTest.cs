@@ -17,7 +17,7 @@ namespace Actio.Api.Tests.Unit.Controllers
     {
         private Mock<IBusClient> _busClientMock;
         private Mock<IActivityService> _activityServiceMock;
-        
+
         public ActivityControllerTest()
         {
             _busClientMock = new Mock<IBusClient>();
@@ -28,8 +28,6 @@ namespace Actio.Api.Tests.Unit.Controllers
         public async void ActivityControllerPost_ShouldReturnAccepted()
         {
             //arrange
-            //var busClientMock = new Mock<IBusClient>();
-            //var activityServiceMock = new Mock<IActivityService>();
             var activityController = new ActivityController(_busClientMock.Object, _activityServiceMock.Object);
             
             var userId = Guid.NewGuid();
