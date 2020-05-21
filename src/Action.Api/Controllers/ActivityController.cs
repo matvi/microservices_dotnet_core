@@ -20,7 +20,7 @@ namespace Action.Api.Controllers {
         }
 
         [HttpPost]
-        public async Task<IActionResult> Activity (CreateActivity command) {
+        public async Task<IActionResult> CreateActivity (CreateActivityCommand command) {
             command.Id = Guid.NewGuid ();
             command.CreatedAt = DateTime.Now;
             command.UserId = Guid.Parse(User.Identity.Name);

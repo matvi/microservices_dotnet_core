@@ -35,7 +35,7 @@ namespace Action.Services.Activities
             services.AddControllers();
             services.AddRabbitMq(Configuration);
             services.AddMongoDB(Configuration);
-            services.AddScoped<ICommandHandler<CreateActivity>, CreateActivityHandler>();
+            services.AddScoped<ICommandHandler<CreateActivityCommand>, CreateActivityHandler>();
             services.AddScoped<Domain.Repositories.IActivityRepository, ActivityRepository>();
             services.AddScoped<Domain.Repositories.ICategoryRepository, CategoryRepository>();
             services.AddScoped<IDatabaseSeeder, CustomMongoSeeder>();

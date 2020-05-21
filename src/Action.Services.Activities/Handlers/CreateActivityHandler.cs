@@ -8,7 +8,7 @@ using Microsoft.Extensions.Logging;
 using RawRabbit;
 
 namespace Action.Services.Activities.Handlers {
-    public class CreateActivityHandler : ICommandHandler<CreateActivity> {
+    public class CreateActivityHandler : ICommandHandler<CreateActivityCommand> {
         private readonly IBusClient _busClient;
         private readonly IActivityService _activityService;
         private ILogger _logger;
@@ -20,7 +20,7 @@ namespace Action.Services.Activities.Handlers {
             _busClient = busClient;
             _logger = logger;
         }
-        public async Task HandlerAsync (CreateActivity command) 
+        public async Task HandlerAsync (CreateActivityCommand command) 
         {
             _logger.LogInformation($"creating activity: {command.Name}, {DateTime.Now.ToString()} ");
             

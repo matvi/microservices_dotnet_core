@@ -7,6 +7,6 @@ namespace Action.Api.Controllers
     public class HomeController : ControllerBase
     {
         [HttpGet]
-        public IActionResult GetAction() => Content("Hellow from Actino API");
+        public IActionResult GetAction() => Content("Hello from Actino API");
     }
 }

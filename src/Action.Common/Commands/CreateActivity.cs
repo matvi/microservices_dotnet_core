@@ -2,7 +2,7 @@ using System;
 
 namespace Action.Common.Commands
 {
-    public class CreateActivity : IAuthenticatedCommand
+    public class CreateActivityCommand : IAuthenticatedCommand
     {
         public Guid UserId { get ; set ; }
         public Guid Id { get; set; }

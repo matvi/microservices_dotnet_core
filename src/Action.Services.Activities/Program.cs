@@ -17,7 +17,7 @@ namespace Action.Services.Activities
         {
             ServiceHost.Create<Startup>(args)
             .UserRabbitMq()
-            .SubscribeToCommand<CreateActivity>()
+            .SubscribeToCommand<CreateActivityCommand>()
             .Build()
             .Run();
         }
