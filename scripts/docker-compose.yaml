@@ -1,0 +1,69 @@
+version: "3"
+
+services: 
+    start-dependencies:
+        image: dadarek/wait-for-dependencies
+        depends_on: 
+            - mongo
+            - rabbitmq
+        
+
+    api:
+        build: ../src/Action.Api
+        links:
+            - rabbitmq
+            - mongo
+        ports:
+            - '5000:5000'
+        networks:
+            mysharednet:
+                ipv4_address: 192.168.0.102
+    
+    activities-service:
+        build: ../src/Action.Services.Activities
+        links:
+            - rabbitmq
+            - mongo
+        ports:
+            - '5050:5050'
+        networks:
+            mysharednet:
+                ipv4_address: 192.168.0.101
+    
+    identity-service:
+        build: ../src/Action.Services.Identity
+        links:
+            - rabbitmq
+            - mongo
+        ports:
+            - '5051:5051'
+        networks:
+            mysharednet:
+                ipv4_address: 192.168.0.100
+
+    mongo:
+        image: mongo
+        container_name: my-dockeredMongo
+        ports: 
+            - '27017:27017'
+        #volumes: #Error in windows. In memory database only. 
+        #    - ./data/db:/data/db
+        networks:
+            mysharednet:
+                ipv4_address: 192.168.0.20
+    
+    rabbitmq:
+        image: rabbitmq:3.6.5-management
+        ports: 
+            - '5672:5672'
+            - '15672:15672'
+        networks:
+            mysharednet:
+                ipv4_address: 192.168.0.10
+
+networks:
+    mysharednet:
+        driver: bridge
+        ipam:
+            config:
+            - subnet: 192.168.0.0/24
