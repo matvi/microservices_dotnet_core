@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: actio-api
+spec:
+  selector:
+    matchLabels:
+      app: actio-api-pod
+  template:
+    metadata:
+      labels:
+        app: actio-api-pod
+    spec:
+      containers:
+      - name: actio-api-container
+        image: mavidocker/actio.api.services:v1
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        ports:
+        - containerPort: 5000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: actio-api-service
+spec:
+  selector:
+    app: actio-api-pod
+  ports:
+  - port: 8080
+    targetPort: 5000
+    nodePort: 30008
+  type: NodePort
+

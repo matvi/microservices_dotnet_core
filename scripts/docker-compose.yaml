@@ -10,6 +10,7 @@ services:
 
     api:
         build: ../src/Action.Api
+        container_name: actio-api-service
         links:
             - rabbitmq
             - mongo
@@ -21,6 +22,7 @@ services:
     
     activities-service:
         build: ../src/Action.Services.Activities
+        container_name: actio-activities-service
         links:
             - rabbitmq
             - mongo
@@ -32,6 +34,7 @@ services:
     
     identity-service:
         build: ../src/Action.Services.Identity
+        container_name: actio-identity-service
         links:
             - rabbitmq
             - mongo
