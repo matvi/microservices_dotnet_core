@@ -1,36 +1,36 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: mongo
+  name: actio-activities
 spec:
   selector:
     matchLabels:
-      app: mongo
+      app: actio-activities-pod
   template:
     metadata:
       labels:
-        app: mongo
+        app: actio-activities-pod
     spec:
       containers:
-      - name: mongo-container
-        image: mongo
+      - name: actio-activities-container
+        image: mavidocker/actio.activities.services:v1
         resources:
           limits:
             memory: "128Mi"
             cpu: "500m"
         ports:
-        - containerPort: 27017
+        - containerPort: 5050
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: mongo-service
+  name: actio-activities-service
 spec:
   selector:
-    app: mongo
+    app: actio-activities-pod
   ports:
-  - port: 8080
-    targetPort: 27017
-    nodePort: 30017
+  - port: 8081
+    targetPort: 5050
+    nodePort: 30009
   type: NodePort
 

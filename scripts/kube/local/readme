@@ -1,0 +1,16 @@
+This scripts are made to load the images into local kubernetes.
+
+Tested in windows hiperv and Debian9 in minikube cluster with kv2.
+
+To run this tests you need to build the images using the ks8.Dockerfile that will use the appserttings.ks8.json that is located in each project.
+Once you build the images you need to publish them.
+
+After the images are published you need to run the scripts in the next order.
+
+1. local-PV that creates the local persistet volume that will allow mongoDb to persiste the data
+2. mongo-statefulset.yaml this file creates a headless service and creates a statefulset to deploy mongo allowing us to access mongo database using dns name mongo-0.mongo
+    it also creates a PVC that will connect with the local-PV that we created in the first deploy.
+3. rabbitmq-statefulset.yaml this files creates a headless service for rabbitmq and also a statefulset for rabbitmq server.
+4. actioApi_deployment deploys ActioApi.
+5. actioServiceActivities_deployment deploys Actio activities service .
+6. actioServiceIdentity_deployment deploys Actio identity server service.

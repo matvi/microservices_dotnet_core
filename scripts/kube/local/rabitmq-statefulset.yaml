@@ -10,7 +10,7 @@ spec:
     targetPort: 5672
   clusterIP: None
   selector:
-    role: rabbitmq
+    app: rabbitmq
 ---
 apiVersion: apps/v1
 kind: StatefulSet
