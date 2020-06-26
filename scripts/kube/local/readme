@@ -14,3 +14,4 @@ After the images are published you need to run the scripts in the next order.
 4. actioApi_deployment deploys ActioApi.
 5. actioServiceActivities_deployment deploys Actio activities service .
 6. actioServiceIdentity_deployment deploys Actio identity server service.
+7.- mongo-nodePortService cretes a NodePort service to be able to access the mongo Db server from outside the cluster.

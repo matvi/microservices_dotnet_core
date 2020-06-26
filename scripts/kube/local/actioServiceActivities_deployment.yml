@@ -13,7 +13,7 @@ spec:
     spec:
       containers:
       - name: actio-activities-container
-        image: mavidocker/actio.activities.services:v1
+        image: mavidocker/actio.activities.service:v1
         resources:
           limits:
             memory: "128Mi"
